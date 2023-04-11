@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "399113531490",
+    "project_id": "trocbuy-62cac",
+    "storage_bucket": "trocbuy-62cac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399113531490:android:1eb4dd386c04d5d7f7613b",
+        "android_client_info": {
+          "package_name": "fr.trocbuy2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399113531490-igurn7pvgmq6lc5ea5g632d2l1g5c2vl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fr.trocbuy2",
+            "certificate_hash": "4d758c3aff3f52f5b1a3da947d97d188807b9c82"
+          }
+        },
+        {
+          "client_id": "399113531490-b92d1o33filfdon83lpi60q8vp5amajr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2dL4XL_dnYwUdOLAue9-cSAyS8NlDyrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399113531490-b92d1o33filfdon83lpi60q8vp5amajr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
