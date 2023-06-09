@@ -1,3 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trocbuy/global_functions/init_data.dart';
+import 'package:trocbuy/providers/message_model_prov.dart';
+
 class Utils {
   static const appName = "Trocbuy";
   static const versionNumber = "1.0.5";
@@ -30,4 +35,21 @@ class Utils {
   static String getCurrency() {
     return " €";
   }
+
+  static String messagesCollectionName="messages";
+  static String conversationDoc="conversation";
+  static String buildConversationCollection(BuildContext context){
+    final messageModel =context.read<MessageModelProv>().messageModel;
+    List<String> strings = [messageModel.senderEmail, messageModel.receiverEmail];
+    strings.sort();
+    return strings.first+strings[1];
+  }
+
+ /* static String buildConversationCollection2(BuildContext context){
+    final messageModel =context.read<MessageModelProv>().messageModel;
+    List<String> strings = [InitData.prefs.getString("email")!, messageModel.receiverEmail];
+    strings.sort();
+    print("Strings>>>< ${strings.first+strings[1]}");
+    return strings.first+strings[1];
+  }*/
 }

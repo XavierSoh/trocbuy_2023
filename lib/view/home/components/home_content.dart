@@ -2,15 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../providers/scollable_provider.dart';
+import '../../../res/strings.dart';
 import '../../components/app_bar/default_app_bar.dart';
+import '../../components/search_bar.dart' as my_search_bar;
 import 'ads_premium.dart';
 import 'ads_recent.dart';
 import 'cat_lang_slides.dart';
 import 'custom_floating_action_button.dart';
-
-import '../../../providers/scollable_provider.dart';
-import '../../../res/strings.dart';
-import '../../components/search_bar.dart';
 
 class HomeContent extends StatelessWidget {
   const HomeContent({
@@ -19,7 +19,6 @@ class HomeContent extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final scrollable = context.watch<ScrollableProvider>();
@@ -28,7 +27,7 @@ class HomeContent extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SearchBar(
+            my_search_bar.SearchBar(
               hintText: Strings.kSearchBarHintText,
             ),
             const SizedBox(

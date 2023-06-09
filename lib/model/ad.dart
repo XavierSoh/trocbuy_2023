@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'ad.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Ad implements Comparable {
   final int? top;
   final int? type;
@@ -27,103 +27,70 @@ class Ad implements Comparable {
   final String? name;
   final String? postcode;
 
-  @JsonKey(name: "picture_name")
   final String? pictureName;
 
-  @JsonKey(name: "id_ad")
   final int? idAd;
 
-  @JsonKey(name: "id_reg")
   final int? idReg;
 
-  @JsonKey(name: "id_county")
   final int? idCounty;
 
-  @JsonKey(name: "id_cat")
   final int? idCat;
 
-  @JsonKey(name: "calendar_date")
   final String? calendarDate;
 
-  @JsonKey(name: "id_acc")
   final int? idAcc;
 
-  @JsonKey(name: "picture_num")
   final int? pictureNum;
 
-  @JsonKey(name: "video_num")
   final int? videoNum;
 
-  @JsonKey(name: "comment_total")
   final int? commentTotal;
 
-  @JsonKey(name: "comment_average")
   final double? commentAverage;
 
-  @JsonKey(name: "phone_hidden")
   final int? phoneHidden;
 
-  @JsonKey(name: "pictures_num")
   final int? picturesNum;
 
-  @JsonKey(name: "pictures_pack")
   final int? picturesPack;
 
-  @JsonKey(name: "visit_num")
   final int? visitNum;
 
-  @JsonKey(name: "last_v")
   final String? lastVisit;
 
-  @JsonKey(name: "last_h")
   final String? lastHour;
 
-  @JsonKey(name: "comp_name")
   final String? companyName;
 
-  @JsonKey(name: "comp_num")
   final String? companyNum;
 
-  @JsonKey(name: "top_days")
   final int? topDays;
 
-  @JsonKey(name: "top_time")
   final int? topTime;
 
-  @JsonKey(name: "urgent_days")
   final int? urgentDays;
 
-  @JsonKey(name: "urgent_time")
   final int? urgentTime;
 
-  @JsonKey(name: "framed_days")
   final int? framedDays;
 
-  @JsonKey(name: "framed_time")
   final int? framedTime;
 
-  @JsonKey(name: "premium_days")
   final int? premiumDays;
 
-  @JsonKey(name: "premium_time")
   final int? premiumTime;
 
-  @JsonKey(name: "id_shop")
   final int? idShop;
 
-  @JsonKey(name: "id_cat_shop")
   final int? idCatShop;
 
-  @JsonKey(name: "id_reg_shop")
   final int? idRegShop;
 
-  @JsonKey(name: "id_county_shop")
   final int? idCountyShop;
 
-  @JsonKey(name: "title_shop")
   final String? titleShop;
 
-  @JsonKey(name: "type_acc")
   final int? typeAcc;
 
   Ad({
@@ -183,8 +150,8 @@ class Ad implements Comparable {
     this.commentAverage,
   });
 
-  factory Ad.fromJson(Map<String, dynamic> json) => _$AdFromJson(json);
   Map<String, dynamic> toJson() => _$AdToJson(this);
+  factory Ad.fromJson(json) => _$AdFromJson(json);
 
   @override
   bool operator ==(Object other) =>

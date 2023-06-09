@@ -30,15 +30,15 @@ class _LoginPageState extends State<LoginPage> {
     final height = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
         child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          const SizedBox(height: 30),
-          Container(
+          SizedBox(
             height: height * 45 / 100,
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   const SizedBox(height: 5),
@@ -117,36 +117,6 @@ class _LoginPageState extends State<LoginPage> {
                           duration: const Duration(seconds: 2),
                         );
                       }
-                      //   await EasyLoading.show(status: 'Connexion en cours');
-                      //   Provider.of<InfoCompteController>(context, listen: false)
-                      //       .InfoGlobal['email'] = emailController.text.toString();
-                      //   Provider.of<InfoCompteController>(context, listen: false)
-                      //           .InfoGlobal['password'] =
-                      //       passwordController.text.toString();
-
-                      //   var response = await http.post(
-                      //       Uri.parse("https://api.trocbuy.fr/flutter/login.php"),
-                      //       body: Provider.of<InfoCompteController>(context,
-                      //               listen: false)
-                      //           .InfoGlobal);
-
-                      //   Provider.of<InfoCompteController>(context, listen: false)
-                      //           .InfoGlobal['etat'] =
-                      //       json.decode(response.body)['resultat'].toString();
-                      //   print(
-                      //       'provider : ${Provider.of<InfoCompteController>(context, listen: false).InfoGlobal}');
-                      //   if (Provider.of<InfoCompteController>(context,
-                      //               listen: false)
-                      //           .InfoGlobal['etat'] ==
-                      //       'true') {
-                      //     LoginFunction.signIn(response, context);
-                      //   } else {
-                      //     LoginFunction.showErrorAlertDialog(context);
-                      //     Provider.of<InfoCompteController>(context, listen: false)
-                      //         .InfoGlobal
-                      //         .clear();
-                      //   }
-                      //   EasyLoading.dismiss();
                     },
                   ),
                   // ignore: deprecated_member_use
@@ -163,9 +133,9 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(
             height: 20,
           ),
-          Column(
+          const Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Text("Vous n'avez pas de compte ?"),
               SizedBox(
                 height: 5,

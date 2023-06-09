@@ -30,7 +30,7 @@ class AdImages extends StatelessWidget {
             options: Styles.carousselOptionsForImages(height),
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, int index, int index2) {
-              return selectedAd.urgent == 1
+              return selectedAd.urgent == '1'
                   ? Ribbon(
                       location: RibbonLocation.topStart,
                       title: Strings.kUrgent,

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../res/styles.dart';
-import 'components/count_ads_of_author.dart';
-import '../components/ad_sort_button.dart';
-import '../components/app_bar/default_app_bar.dart';
 
 import '../../providers/selected_ad.dart';
 import '../../res/strings.dart';
+import '../../res/styles.dart';
+import '../components/ad_sort_button.dart';
 import '../components/ads_top_buttons.dart';
-import '../components/search_bar.dart';
+import '../components/app_bar/default_app_bar.dart';
+import '../components/search_bar.dart' as my_search_bar;
 import 'components/ads_author_content.dart';
+import 'components/count_ads_of_author.dart';
 
 class AdsOfAuthor extends StatelessWidget {
   static const id = "ads_of_author";
@@ -32,14 +32,14 @@ class AdsOfAuthor extends StatelessWidget {
           ),
           body: Stack(
             children: [
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(
+                    SizedBox(
                       height: 60,
                     ),
                     Wrap(
-                      children: const [
+                      children: [
                         AdsTopButtons(),
                         SizedBox(
                           height: 16.0,
@@ -51,7 +51,7 @@ class AdsOfAuthor extends StatelessWidget {
                   ],
                 ),
               ),
-              SearchBar(
+              my_search_bar.SearchBar(
                 hintText: Strings.kSearchBarHintText,
               ),
             ],

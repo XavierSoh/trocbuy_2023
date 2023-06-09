@@ -34,7 +34,7 @@ class TextFormFieldNormal extends StatelessWidget {
         maxLines: maxLines,
         keyboardType: keyboardType,
         onChanged: onChanged,
-        validator: validator ?? DefaultValidator.validator,
+        validator: validator ,
         obscureText: obscureText,
         controller: controller,
         decoration: InputDecoration(

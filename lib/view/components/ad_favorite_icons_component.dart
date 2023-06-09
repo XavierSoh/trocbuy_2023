@@ -1,26 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:trocbuy/model/ad.dart';
 
 import '../../model/database_helper.dart';
 import '../favorite/provider/provider_favorite.dart';
 
 class AdFavoriteIconsComponent extends StatefulWidget {
-  final String idAd;
+  final Ad ad;
 
-  const AdFavoriteIconsComponent({required this.idAd});
+  AdFavoriteIconsComponent({required this.ad});
 
   @override
-  _AdFavoriteIconsComponentState createState() => _AdFavoriteIconsComponentState();
+  _AdFavoriteIconsComponentState createState() =>
+      _AdFavoriteIconsComponentState();
 }
 
 class _AdFavoriteIconsComponentState extends State<AdFavoriteIconsComponent> {
   bool typeButton = false;
+  @override
+  void initState() {
+    checkFavoritePresence();
+    super.initState();
+  }
 
-  Future checkFavoitePresence() async {
-    if (Provider.of<FavoriteFunctions>(context).adFavorites.isNotEmpty) {
-      for (var row in Provider.of<FavoriteFunctions>(context).adFavorites) {
-        if (widget.idAd == row) {
+  Future checkFavoritePresence() async {
+    if (Provider.of<FavoriteFunctions>(context, listen: false)
+        .adFavorites
+        .isNotEmpty) {
+      for (var row in Provider.of<FavoriteFunctions>(context, listen: false)
+          .adFavorites) {
+        if (widget.ad == row) {
           setState(() {
             typeButton = true;
           });
@@ -33,7 +43,6 @@ class _AdFavoriteIconsComponentState extends State<AdFavoriteIconsComponent> {
 
   @override
   build(BuildContext context) {
-    checkFavoitePresence();
     return Positioned(
       bottom: -4,
       right: -16,
@@ -45,33 +54,37 @@ class _AdFavoriteIconsComponentState extends State<AdFavoriteIconsComponent> {
         onPressed: () async {
           if (typeButton == false) {
             await Provider.of<FavoriteFunctions>(context, listen: false)
-                .setListFavorite(context, widget.idAd);
+                .setListFavorite(context, widget.ad);
 
-            int i = await DatabaseHelper.instance.insert({DatabaseHelper.columnName: widget.idAd});
-            setState(() {
-              typeButton = true;
-            });
-            Fluttertoast.showToast(
+            await DatabaseHelper.instance
+                .insert(widget.ad.toJson())
+                .then((value) {
+              Fluttertoast.showToast(
                 msg: "Annonce ajoutée aux favoris",
                 toastLength: Toast.LENGTH_LONG,
                 gravity: ToastGravity.BOTTOM,
                 timeInSecForIosWeb: 1,
-                fontSize: 16.0);
+                fontSize: 16.0,
+              );
+            });
           } else {
             await Provider.of<FavoriteFunctions>(context, listen: false)
-                .deleteFavorite(context, widget.idAd);
-            int rowsEffected = await DatabaseHelper.instance.delete(widget.idAd);
-            setState(() {
-              typeButton = false;
+                .deleteFavorite(context, widget.ad);
+
+            await DatabaseHelper.instance.delete(widget.ad).then((value) {
+              Fluttertoast.showToast(
+                msg: "Annonce retirée des favoris",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                fontSize: 16.0,
+              );
             });
-            Fluttertoast.showToast(
-              msg: "Annonce ajoutée aux favoris",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              fontSize: 16.0,
-            );
           }
+
+          setState(() {
+            typeButton = !typeButton;
+          });
         },
       ),
     );

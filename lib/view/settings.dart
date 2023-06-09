@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 // import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart';
+import 'package:trocbuy/constants/constants.dart';
 import 'package:trocbuy/res/styles.dart';
 import 'package:trocbuy/view/components/app_bar/default_app_bar.dart';
 import 'package:trocbuy/view/home/home.dart';
@@ -128,7 +130,7 @@ class SettingsScreenState extends State<SettingsScreen> {
         isLoading = true;
       });
     }
-    // uploadFile();
+    //uploadFile();
   }
 
   Future<void> showAlertDialogDelete(
@@ -226,6 +228,9 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "Account >>>>>>>>>>>>>>>>>> ^*${Provider.of<InfoCompteController>(context).InfoGlobal}");
+
     return Stack(
       children: <Widget>[
         SingleChildScrollView(
@@ -244,7 +249,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                                       child: const CircularProgressIndicator(
                                         strokeWidth: 2.0,
                                         valueColor:
-                                            const AlwaysStoppedAnimation<Color>(
+                                            AlwaysStoppedAnimation<Color>(
                                                 Styles.principalColor),
                                       ),
                                       width: 120.0,
@@ -257,7 +262,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                                     fit: BoxFit.cover,
                                   ),
                                   borderRadius: const BorderRadius.all(
-                                      const Radius.circular(45.0)),
+                                      Radius.circular(45.0)),
                                   clipBehavior: Clip.hardEdge,
                                 )
                               : const Icon(
@@ -298,8 +303,8 @@ class SettingsScreenState extends State<SettingsScreen> {
               ),
               InkWell(
                 child: const Text(
-                  'Modifer votre photo',
-                  style: const TextStyle(color: Colors.blue),
+                  'Modifer la photo',
+                  style: TextStyle(color: Colors.blue),
                 ),
                 onTap: getImage,
               ),
@@ -321,7 +326,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                             children: [
                               const Text(
                                 "Nom :",
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 16, color: Colors.black),
                               ),
                               Padding(
@@ -377,7 +382,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                             children: [
                               const Text(
                                 "Prénom :",
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 16, color: Colors.black),
                               ),
                               Padding(
@@ -764,60 +769,49 @@ class SettingsScreenState extends State<SettingsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 minWidth: 150,
                 onPressed: () async {
-                  await EasyLoading.show(status: 'Connexion en cours');
-                  // setState(() {
-                  //   InforamtionUser.info['name'] = name;
-                  //   InforamtionUser.info['first_name'] = first_name;
-                  //   InforamtionUser.info['pseudo'] = pseudo;
-                  //   InforamtionUser.info['email'] = email;
-                  //   InforamtionUser.info['phone'] = phone;
-                  //   InforamtionUser.info['address'] = address;
-                  //   InforamtionUser.info['postcode'] = postcode;
-                  //   InforamtionUser.info['about_me'] = aboutMe;
-                  // });
-                  print(
-                      Provider.of<InfoCompteController>(context, listen: false)
-                          .InfoGlobal);
+                  await EasyLoading.show(status: 'Mise à jour...');
+                  setState(() {
+                    InforamtionUser.info['name'] = name;
+                    InforamtionUser.info['first_name'] = first_name;
+                    InforamtionUser.info['pseudo'] = pseudo;
+                    InforamtionUser.info['email'] = email;
+                    InforamtionUser.info['phone'] = phone;
+                    InforamtionUser.info['address'] = address;
+                    InforamtionUser.info['postcode'] = postcode;
+                    InforamtionUser.info['about_me'] = aboutMe;
+                  });
+
+                  if (kDebugMode) {
+                    print(Provider.of<InfoCompteController>(context,
+                            listen: false)
+                        .InfoGlobal);
+                  }
                   var response = await http.post(
-                      Uri.parse(
-                          "https://api.trocbuy.fr/flutter/duo_update_profil.php"),
-                      body: Provider.of<InfoCompteController>(context,
-                              listen: false)
-                          .InfoGlobal);
-                  print(response.body);
+                    Uri.parse(
+                        "https://api.trocbuy.fr/flutter/duo_update_profil.php"),
+                    body: jsonEncode(
+                      Provider.of<InfoCompteController>(context, listen: false)
+                          .InfoGlobal,
+                    ),
+                  );
 
                   if (jsonDecode(response.body)['resultat'] == '1') {
-                    await EasyLoading.showSuccess('valide',
+                    await EasyLoading.showSuccess('Compte modifié',
                         duration: const Duration(seconds: 5));
 
                     await EasyLoading.dismiss();
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => const Home()));
                   } else {
-                    EasyLoading.showError('Verfier votre information',
+                    EasyLoading.showError('Verifiez les informations fournies',
                         duration: const Duration(seconds: 3));
                     await EasyLoading.dismiss();
                     Navigator.of(context).pop();
                   }
+                  await EasyLoading.dismiss();
                 },
                 color: Colors.green,
               ),
-              /*// Button
-                Container(
-                  child: FlatButton(
-                    onPressed: handleUpdateData,
-                    child: Text(
-                      'ENREGISTRER',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    color: primaryColor,
-                    highlightColor: Color(0xff8d93a0),
-                    splashColor: Colors.transparent,
-                    textColor: Colors.white,
-                    padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-                  ),
-                  margin: EdgeInsets.only(top: 50.0, bottom: 50.0),
-                ),*/
             ],
           ),
           padding: const EdgeInsets.only(left: 15.0, right: 15.0),

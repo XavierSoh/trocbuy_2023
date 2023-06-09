@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:trocbuy/model/ad.dart';
 
-import '../../model/ad.dart';
 import '../../model/filter_option.dart';
 import '../../utils/utils.dart';
 
@@ -43,7 +43,8 @@ class FilterFunctions {
         (response) {
           if (response.statusCode == 200) {
             var jsonResponse = jsonDecode(response.body);
-            ads = List.from(jsonResponse).map((e) => Ad.fromJson(e)).toList();
+            ads =
+                List.from(jsonResponse).map<Ad>((e) => Ad.fromJson(e)).toList();
           } else {
             //TODO:shos error alert dialog
           }

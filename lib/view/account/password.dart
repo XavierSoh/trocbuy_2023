@@ -47,7 +47,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         child: Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const DefaultAppBar(
-        title: 'Modifier votre mot de passe',
+        title: 'Mis à jour du mot de pass',
       ),
       body: Padding(
         padding: const EdgeInsets.all(14.0),
@@ -92,7 +92,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       height: 25,
                     ),
                     PasswordField(
-                      hintText: 'Confirmer votre mot de passe',
+                      hintText: 'Confirmez votre mot de passe',
                       obscureText:
                           Provider.of<PasswordProvider>(context).hideCPassword,
                       onPressed: () =>
@@ -108,7 +108,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                   minWidth: 150,
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      await EasyLoading.show(status: 'Connexion en cours');
+                      await EasyLoading.show(
+                          status: 'Modification du mot de passe');
                       if (_newPasswordController.text ==
                               _confirmPasswordController.text &&
                           _newPasswordController.text !=
@@ -119,10 +120,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                               _oldPasswordController.text.toString();
                           UpdatePassword.info['passwordN'] =
                               _newPasswordController.text.toString();
+
                           var response = await http.post(
                               Uri.parse(
                                   "https://api.trocbuy.fr/flutter/duo_update_password.php"),
-                              body: UpdatePassword.info);
+                              body: jsonEncode(UpdatePassword.info));
+                          print('Body pass>>> ${response.body}');
                           if (jsonDecode(response.body)['resultat'] == true) {
                             EasyLoading.showSuccess('Mot de passe changé',
                                     duration: const Duration(seconds: 2))
@@ -136,10 +139,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 .changeHidePasswordToFalse();
                             Navigator.of(context).pop();
                           } else {
-                            EasyLoading.showError('Verfier votre information',
+                            EasyLoading.showError('Verfiez vos informations',
                                 duration: const Duration(seconds: 2));
                           }
                         } catch (e) {
+                          print('Pass error>>> $e');
                           EasyLoading.showError(
                               'Erreur de changement de mot de passe, veuillez réessayer',
                               duration: const Duration(seconds: 2));

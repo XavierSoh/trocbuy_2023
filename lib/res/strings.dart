@@ -16,7 +16,7 @@ class Strings {
   static String kVersion = "Version";
   static String kAllHisAds = "Toutes ses annonces";
   static String kPublish = "Publier";
-  static String kMessage = "Message";
+  static String kMessage = "Messages";
   static String kAccount = "Mon compte";
   static String kSortBy = "Trier par: ";
   static String kProfile = "Profil";
@@ -37,8 +37,7 @@ class Strings {
   static String kAddNumberText = "Annonce n°";
   static String kTheDirection = "La direction";
   static String kTechnicalService = "Service technique";
-  static String reportControllerText =
-      "Cette annonce présente un contenu suspect ou illégal.";
+  static String reportControllerText = "Cette annonce présente un contenu suspect ou illégal.";
   static String kSend = "Envoyer";
   static String kView = "Vue:";
   static String kRunning = "En cours...";
@@ -68,8 +67,7 @@ class Strings {
   static String kAdvancedResearch = "Recherche avancée";
   static String kResultFor = "Résultats pour:";
   static String kAllCategories = "Toutes les catégories";
-  static String kTextMessage =
-      "Bonjour%20votre%20annonce%20parue%20sur%20trocbuy%20m\'intéresse.";
+  static String kTextMessage = "Bonjour%20votre%20annonce%20parue%20sur%20trocbuy%20m\'intéresse.";
   static String kIncorrectEmailOrPassword = "E-mail/Mot de passe incorrect";
   static String kSearchBarHintText = "Que recherchez-vous?";
   static String kAdsLoading = "Chargement de l'annonce...";
@@ -109,16 +107,13 @@ class Strings {
   static String kPasswordHint = "Mot de passe";
   static String kForgotPasswordQuestion = "Mot de passe oublié ?";
   static String kErrorOpenningLink = "Impossible d'ouvrir le lien";
-  static String kPasswordErrorMessage =
-      "Le mot de passe doit contenir au moins 8 caractères";
+  static String kPasswordErrorMessage = "Le mot de passe doit contenir au moins 8 caractères";
   static String kEmail = "E-mail";
   static String kIncorrectEmail = "Adresse email incorrecte";
-  static String kMissingOrIncorrectEmail =
-      "Votre adresse email est manquante ou invalide";
+  static String kMissingOrIncorrectEmail = "Votre adresse email est manquante ou invalide";
   static String kIncorrectEmailMessage = "Adresse e-mail incorrecte";
   static String kRemovedFromfavorites = "Annonce supprimée des favoris";
-  static String kLoacalisationMessage =
-      "Vous devez autoriser le service de localisation";
+  static String kLoacalisationMessage = "Vous devez autoriser le service de localisation";
   static String kShareAppText =
       "Utilisons Trocbuy, une application rapide, simple et sécurisée avec plus de 10 000 000 de "
       "petites annonces gratuites. A télécharger sur:\n https://play.google.com/store/apps/details?id=fr.trocbuy2";
@@ -132,8 +127,18 @@ class Strings {
       "Votre conversation dans cet espace est bien sécurisé. Evitez de  donner votre téléphone et votre mail à vos interlocuteurs";
   static String kFindOnCard = 'Recherchez sur la carte';
   static List<String> kCivilityList = <String>[
+    'Votre civilité',
     'M',
     'Mme',
     'Mlle',
   ];
+
+  static String passReset = 'Réinitialisation du mot de passe';
+  static String consultMail =
+      "Un nouveau mot de passe vient de vous être envoyé dans votre boite email, si vous ne le recevez pas d'ici quelques minutes, vérifiez vos mails indésirables.";
+  static String fillFirst = 'Vous devez remplir les champs requis avant de pouvoir continuer';
+  static String correctFirst =
+      'Votre formulaire contient certaines erreurs, veuillez les corriger avant de continuer';
+  static String emailExists = 'Votre adresse email existe déjà';
+  static String inscriptionReussie = 'Inscription réussie. Veuillez vous connecter pour continuer';
 }

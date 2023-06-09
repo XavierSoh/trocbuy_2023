@@ -8,10 +8,10 @@ class Warning extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        color: Colors.yellow[100],
+    return Container(
+      color: Colors.yellow[100],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Text(
           Strings.kWarning,
           textAlign: TextAlign.center,

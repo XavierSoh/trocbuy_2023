@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../res/strings.dart';
-import '../../res/styles.dart';
 
 import '../../providers/ads_view_type_provider.dart';
+import '../../res/strings.dart';
+import '../../res/styles.dart';
 
 class AdsViewTypeButton extends StatelessWidget {
   const AdsViewTypeButton({Key? key}) : super(key: key);
@@ -17,9 +17,7 @@ class AdsViewTypeButton extends StatelessWidget {
       child: TextButton.icon(
         icon: Text(
           Strings.kView,
-          style: Styles.googleStyle.copyWith(
-            color: Styles.principalColor,
-          ),
+          style: const TextStyle(color: Styles.principalColor),
         ),
         label: Icon(
           isGrid ? Icons.grid_view_outlined : Icons.list_outlined,

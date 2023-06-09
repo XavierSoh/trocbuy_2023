@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:trocbuy/providers/selected_cat_lang.dart';
+import 'package:trocbuy/utils/utils.dart';
+import 'package:trocbuy/view/category/about_premium_page.dart';
 import 'package:trocbuy/view/components/no_data_found.dart';
 import 'package:trocbuy/view/home/components/loading_error.dart';
 
@@ -46,73 +48,61 @@ class _AdsCategoryPremiumState extends State<AdsCategoryPremium> {
               if (snapshot.hasData) {
                 final ads = snapshot.data as List<Ad>;
 
-                if (snapshot.data!.isNotEmpty) {
+                if (snapshot.data != null) {
                   final count = ads.length;
-                  return count > 1
-                      ? SizedBox(
-                          height: 330,
-                    width: MediaQuery.of(context).size.width,
-
+                  return SizedBox(
+                    height: count == 0 ? 160 : 330,
                     child: CarouselSlider.builder(
-                            itemCount:(ads.length/2).round(),
-                            itemBuilder: (
-                              context,
-                              index,
-                              realIndex,
-                            ) {
-                              final int first = index * 2;
-                               int? second = 0;
-                              ads.length.isOdd?
-                              second=index<((ads.length/2).round()-1)?first+1:0
-                              :second=index<((ads.length/2).round()-0)?first+1:null;
-                              return Row(
-                                  children: [
-                                    first, second
-                                  ].map((e) {
-                                    return e!=null?AdSingleItemGrid(
-                                      ad: ads[e],
-                                    ):AdSingleItemGrid(
-                                      ad: ads[index],
-                                    );
-                                  }).toList(),
+                      itemCount: (ads.length / 2).round(),
+                      itemBuilder: (
+                        context,
+                        index,
+                        realIndex,
+                      ) {
+                        final int first = index * 2;
+                        int? second = 0;
+                        ads.length.isOdd
+                            ? second = index < ((ads.length / 2).round() - 1) ? first + 1 : 0
+                            : second = index < ((ads.length / 2).round() - 0) ? first + 1 : null;
+                        return ads.isEmpty
+                            ? const Premium2()
+                            : ads.length > 1
+                                ? Row(
+                                    children: [first, second].map((e) {
+                                      return e != null
+                                          ? Flexible(
+                                              flex: 1,
+                                              child: AdSingleItemGrid(
+                                                ad: ads[e],
+                                              ),
+                                            )
+                                          : const Premium();
+                                    }).toList(),
+                                  )
+                                : Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Flexible(
+                                        flex: 1,
+                                        child: AdSingleItemGrid(
+                                          ad: ads[0],
+                                        ),
+                                      ),
+                                      const Premium()
+                                    ],
+                                  );
 
-                              );
-
-
-                                AdSingleItemGrid(
-                                ad: ads[index],
-                              );
-                            },
-
-                            options: CarouselOptions(
-                                initialPage: 0,
-                                autoPlay: true,
-                                aspectRatio: 16/9,
-                                disableCenter: true,
-                                viewportFraction: 2,
-                                enlargeCenterPage: false,
-                                enableInfiniteScroll: true,
-                                autoPlayInterval: const Duration(seconds: 10),
-                                //enlargeStrategy: CenterPageEnlargeStrategy.height
-                              ),
-                          ),
-                        )
-                      : Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Flexible(
-                              flex: 1,
-                              child: AdSingleItemGrid(
-                                ad: ads[0],
-                              ),
-                            ),
-                            const Premium(),
-                          ],
+                        AdSingleItemGrid(
+                          ad: ads[index],
                         );
+                      },
+                      options:
+                          Styles.buildCarouselOptions(height, autoplay: ads.isEmpty ? false : true),
+                    ),
+                  );
                 } else {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-
                     children: const [Premium(), Premium()],
                   );
                 }
@@ -121,16 +111,45 @@ class _AdsCategoryPremiumState extends State<AdsCategoryPremium> {
                 return const LoadingError();
               }
 
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                children: const [Premium(), Premium()],
-              );
+              return const Premium2();
             },
           ),
         ),
       ),
     );
+  }
+}
+
+class Premium2 extends StatelessWidget {
+  const Premium2({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.camera_enhance_outlined, size: 50.0),
+          const SizedBox(height: 16.0),
+          Text(
+            'Ici votre anonce premium',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AboutPremiumPage(),
+                  ),
+                );
+              },
+              child: const Text('En savoir plus'))
+        ],
+      );
   }
 }
 
@@ -144,16 +163,14 @@ class Premium extends StatelessWidget {
     return Flexible(
       flex: 1,
       child: SizedBox(
-         height: 240,
+        height: 240,
         child: Card(
           child: Image.asset(
             'images/premium.png',
-
             fit: BoxFit.contain,
           ),
           elevation: 10.0,
           shadowColor: Styles.principalColor,
-
         ),
       ),
     );

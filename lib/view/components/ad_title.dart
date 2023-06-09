@@ -24,9 +24,7 @@ class AdTitle extends StatelessWidget {
               padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, left: 4.0),
               child: AutoSizeText(
                 title,
-                style: Styles.googleStyle.copyWith(
-                  color: Styles.principalColor,
-                ),
+                style: const TextStyle(color: Styles.principalColor),
               ),
             ),
             Row(

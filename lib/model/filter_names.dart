@@ -13,9 +13,7 @@ enum FilterNames {
   filterByCounty,
   getCatLang,
   getSubCatLang,
-  getQuantityCatLang,
-
-  searchResult,
+  getQuantityCatLang, searchResult,
   countAuthorAds,
   countCountyAds,
   countRegionAds,

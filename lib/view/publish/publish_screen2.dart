@@ -1,24 +1,22 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-//import 'package:r_get_ip/r_get_ip.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../providers/selected_county.dart';
-import '../../providers/selected_region.dart';
-import '../components/app_bar/default_app_bar.dart';
-
 import '../../constants/constants.dart';
 import '../../providers/location_provider.dart';
 import '../../providers/publish_provider.dart';
+import '../../providers/selected_county.dart';
+import '../../providers/selected_region.dart';
 import '../../res/styles.dart';
 import '../account/account_home.dart';
+import '../components/app_bar/default_app_bar.dart';
 import '../components/button_create.dart';
 import '../help_and_about/condition_general.dart';
 
@@ -645,12 +643,7 @@ class _PublishScreen2State extends State<PublishScreen2> {
                               decoration: TextDecoration.underline,
                               decorationColor: Colors.green,
                               decorationThickness: 2,
-                              //decorationStyle:
-                              //TextDecorationStyle.dashed,
                             ),
-                            /*style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Colors.green, fontSize: 14,fontWeight: FontWeight.bold),*/
                           ),
                           onTap: () {
                             Navigator.push(
@@ -669,27 +662,7 @@ class _PublishScreen2State extends State<PublishScreen2> {
                         ),
                       ],
                     ),
-                    /*RadioListTile(
-                      groupValue: withOutOptions,
-                      title: Wrap(
-                        direction: Axis.horizontal,
-                        children: [
-                          Text('Déposer mon annonce sans Options',
-                              style:
-                                  TextStyle(fontSize: 15.0, fontFamily: 'ytv')),
-                        ],
-                      ),
-                      value: withOutOptions,
-                      onChanged: (val) {
-                        setState(() {
-                          withOutOptions = !withOutOptions;
-                          print(withOutOptions);
-                        });
-                      },
-                    ),*/
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Row(
@@ -710,13 +683,13 @@ class _PublishScreen2State extends State<PublishScreen2> {
                             minWidth: 150,
                             onPressed: () async {
                               await EasyLoading.show(
-                                status: 'En cours ...',
+                                status: 'Publication en cours ...',
                               );
 
                               final SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
-                              AdsInformation.info['ip'] =''
-                                  /*await RGetIp.externalIP*/;
+                              AdsInformation.info['ip'] =
+                                  '' /*await RGetIp.externalIP*/;
 
                               AdsInformation.info['name'] =
                                   prefs.getString('name');
@@ -735,10 +708,10 @@ class _PublishScreen2State extends State<PublishScreen2> {
                               AdsInformation.info['email'] =
                                   prefs.getString('email');
 
-                              AdsInformation.info['password'] = '12345678';
+                              AdsInformation.info['password'] = '_pass_';
                               /* Provider.of<PublishProvider>(context,
                                           listen: false)
-                                      .password;*/
+                                      .password*/
                               AdsInformation.info['title'] =
                                   Provider.of<PublishProvider>(context,
                                           listen: false)
@@ -789,10 +762,11 @@ class _PublishScreen2State extends State<PublishScreen2> {
                                   Provider.of<PublishProvider>(context,
                                           listen: false)
                                       .postalCode;
-                              AdsInformation.info['adress'] =
+                              AdsInformation.info['address'] =
                                   Provider.of<PublishProvider>(context,
                                           listen: false)
-                                      .address;
+                                      .address
+                                      .toString();
 
                               AdsInformation.info['phone'] =
                                   Provider.of<PublishProvider>(context,
@@ -841,16 +815,25 @@ class _PublishScreen2State extends State<PublishScreen2> {
                                       listen: false)
                                   .pictureNumber;
                               AdsInformation.info['picture_num'] = j.toString();
-                              AdsInformation.info['pictures_num'] =
-                                  j.toString();
 
                               var reponse = await http.post(
                                   Uri.parse(
                                       "https://api.trocbuy.fr/flutter/publish_ad.php"),
                                   body: AdsInformation.info);
-
-                              AdsInformation.id_ad = jsonDecode(reponse.body);
-
+                              if (kDebugMode) {
+                                print(
+                                    "Reponse 1 >>>>>>>>>>>>>>>>>>>>${reponse.body}");
+                              }
+                              final jsonResponse = jsonDecode(reponse.body);
+                              AdsInformation.id_ad = jsonResponse["id_ads"];
+                              AdsInformation.info['id_ad'] =
+                                  jsonResponse["id_ads"];
+                              var response2 = await http.post(
+                                Uri.parse(
+                                  "https://api.trocbuy.fr/flutter/publish_option_ad.php",
+                                ),
+                                body: AdsInformation.info,
+                              );
                               try {
                                 for (int i = 0; i < j; i++) {
                                   AdsInformationPhoto.picture['name'] =
@@ -862,14 +845,12 @@ class _PublishScreen2State extends State<PublishScreen2> {
                                               listen: false)
                                           .imageBase64[i];
                                   AdsInformationPhoto.picture['id_ad'] =
-                                      AdsInformation.id_ad["id_ads"];
+                                      AdsInformation.id_ad;
 
                                   await http.post(
                                       Uri.parse(
                                           "https://api.trocbuy.fr/flutter/photo_upload.php"),
                                       body: AdsInformationPhoto.picture);
-
-                                  // print(AdsInformationPhoto.picture);
                                 }
 
                                 Fluttertoast.showToast(msg: "Annonce publiée");
@@ -880,15 +861,22 @@ class _PublishScreen2State extends State<PublishScreen2> {
                                 Provider.of<PublishProvider>(context,
                                         listen: false)
                                     .clearPublishProvider();
+
+                                setState(() {});
                                 Navigator.pushReplacementNamed(
                                     context, AccountHome.id);
-                              } catch (e) {
-                                //print("Error>>> $e");
+                              } catch (e, trace) {
+                                if (kDebugMode) {
+                                  print(e);
+                                  print(trace);
+                                }
+
                                 EasyLoading.dismiss();
-                                EasyLoading.showError(
-                                    'Verifier votre connexion internet et réessayer',
+                                EasyLoading.showError('Une erreur est survenue',
                                     duration: const Duration(seconds: 2));
                               }
+
+                              await EasyLoading.dismiss();
                             },
                             color: Colors.green,
                           ),

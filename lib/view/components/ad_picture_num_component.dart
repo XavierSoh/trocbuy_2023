@@ -8,10 +8,11 @@ class AdPictureNumComponent extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return ad.picturesNum! > 0
+    final number = ad.picturesNum ?? 0;
+    return number > 0
         ? Positioned(
-            left: ad.picturesNum! < 10 ? 4 : 8,
-            top: ad.picturesNum! < 10 ? 10 : 18,
+            left: number < 10 ? 4 : 8,
+            top: number < 10 ? 10 : 18,
             child: Badge(
               child: /*ad.picturesNum!<9?const */ const Icon(
                 Icons.camera_alt,

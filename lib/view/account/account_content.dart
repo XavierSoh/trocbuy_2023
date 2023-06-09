@@ -4,16 +4,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../model/user_infos.dart';
 import '../../res/strings.dart';
 import '../../utils/utils.dart';
-import 'profile.dart';
-import '../favorite/provider/provider_favorite.dart';
-
 import 'component/expansionList.dart';
 import 'myAds/my_ads.dart';
+import 'profile.dart';
 
 class AccountContent extends StatefulWidget {
   const AccountContent({Key? key}) : super(key: key);
@@ -40,7 +38,6 @@ class _AccountContentState extends State<AccountContent> {
   // File avatarImageFile ;
 
   Future adsNumber() async {
-    Provider.of<FavoriteFunctions>(context, listen: false).getListFavorite;
     String url = '${Utils.baseUrl}/duo_ads_number_compte.php';
     print('number ${UserInfos.info}');
     http.Response response =

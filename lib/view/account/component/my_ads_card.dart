@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../../global_functions/default_validator.dart';
-import '../myAds/update_images.dart';
 
 import '../../../global_functions/ads_functions.dart';
+import '../../../global_functions/default_validator.dart';
 import '../Widget/menu.dart';
 import '../myAds/boost_ads.dart';
+import '../myAds/update_images.dart';
 import 'show_image_network.dart';
 import 'textformfield_normal.dart';
 
@@ -19,7 +19,8 @@ class MyAdsCard extends StatelessWidget {
   String nomberVues;
   var adsInfo;
   MyAdsCard(
-      {required this.imagePath,
+      {super.key,
+      required this.imagePath,
       required this.titreAnnonce,
       required this.prixAnnonce,
       this.jourExpirer,
@@ -68,6 +69,11 @@ class MyAdsCard extends StatelessWidget {
                         // width: 67.5,
                         //height: 67.5,
                         fit: BoxFit.cover,
+                        errorWidget: (context, error, dynam) {
+                          return Image.network(
+                            'https://api.trocbuy.fr/flutter/trocbuy28/images/download.png',
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -107,14 +113,16 @@ class MyAdsCard extends StatelessWidget {
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.45,
-                          child: Text(
-                            'Expirer le: $jourExpirer ',
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.grey),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            softWrap: true,
-                          ),
+                          child: jourExpirer != null
+                              ? Text(
+                                  'Expire le: $jourExpirer ',
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.grey),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  softWrap: true,
+                                )
+                              : const SizedBox.shrink(),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.45,
@@ -180,7 +188,7 @@ class MyAdsCard extends StatelessWidget {
 
   void onSelected(BuildContext context, MenuItemHome item, var adsInfo) {
     TextEditingController titleController =
-        TextEditingController(text: adsInfo.title);
+        TextEditingController(text: adsInfo?.title ?? '--');
     TextEditingController textController =
         TextEditingController(text: adsInfo.text);
 

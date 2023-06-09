@@ -21,7 +21,7 @@ class ContactDialogContent extends StatelessWidget {
         SimpleDialogOption(
           onPressed: () {
             Navigator.pop(context);
-            AdDetailsFunctions.callNumber(currentAd.phone ?? "");
+            AdDetailsFunctions.callNumber(currentAd.phone?.replaceAll(' ', '') ?? "");
           },
           child: ListTile(
             //isThreeLine: true,
@@ -45,7 +45,7 @@ class ContactDialogContent extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
             AdDetailsFunctions.textAdvertiser(
-              currentAd.phone ?? "",
+              currentAd.phone?.replaceAll(' ', '') ?? "",
             );
           },
           child: ListTile(
@@ -62,7 +62,7 @@ class ContactDialogContent extends StatelessWidget {
               ),
             ),
             subtitle: Text(
-              currentAd.phone ?? "",
+               currentAd.phone ?? "",
             ),
           ),
         ),

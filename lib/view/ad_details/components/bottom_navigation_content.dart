@@ -1,7 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../providers/navigation_index.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trocbuy/model/is_login.dart';
+import 'package:trocbuy/model/message_model.dart';
+import 'package:trocbuy/providers/message_model_prov.dart';
+import 'package:trocbuy/view/home/home.dart';
+import 'package:trocbuy/view/message/message_controller/message_controller.dart';
 
+import '../../../providers/navigation_index.dart';
 import '../../../providers/selected_ad.dart';
 import '../../../res/strings.dart';
 import '../../../res/styles.dart';
@@ -16,6 +23,7 @@ class BottomNavigationContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentAd = context.watch<SelectedAd>().ad;
+    final changeIndex = context.read<NavigationIndexProvider>();
     return Container(
       color: Colors.white,
       height: 60.0,
@@ -60,18 +68,61 @@ class BottomNavigationContent extends StatelessWidget {
                 color: Colors.white,
               ),
               title: Strings.kMessage,
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Conversations(
-                      autorName: currentAd!.name ?? "",
-                      id: currentAd.idAd.toString(),
-                      autorMail: currentAd.email ?? "",
-                    ),
-                  ),
-                );
-              },
+              onPressed: IsLogin.state == true
+                  ? () async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      final email = prefs.getString('email');
+
+                      context.read<MessageModelProv>().change(
+                            MessageModel(
+                              emails: [email!, currentAd!.email!],
+                              senderEmail: email,
+                              receiverEmail: currentAd.email!,
+                              date: DateTime.now(),
+                              idAd: currentAd.idAd!,
+                              title: currentAd.title,
+                              author: currentAd.name,
+                            ),
+                          );
+
+                      await MessageController.updateReadState(context).then(
+                        (value) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Conversations(),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  : () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text(
+                                  'Vous devez vous authentifier pour continuer'),
+                              content: CupertinoButton.filled(
+                                onPressed: () {
+                                  changeIndex.changeIndex(4);
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    Home.id,
+                                  );
+                                },
+                                child: Text('Connexion'),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('Fermer'),
+                                ),
+                              ],
+                            );
+                          });
+                    },
             ),
           ],
         ),
@@ -84,6 +135,7 @@ class BottomItem extends StatelessWidget {
   final Function()? onPressed;
   final Widget icon;
   final String title;
+
   const BottomItem(
       {Key? key, this.onPressed, required this.icon, required this.title})
       : super(key: key);

@@ -1,7 +1,9 @@
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:trocbuy/view/login_page/provider/info_compte.dart';
 
 import '../../../model/user_infos.dart';
 import '../../../providers/myads_provider.dart';
@@ -21,9 +23,12 @@ class _MyAdsState extends State<MyAds> {
   adsNumber() async {
     String url = 'https://api.trocbuy.fr/flutter/duo_mesannonces.php';
     try {
-      print('inof user = ${UserInfos.info}');
-      await http.post(Uri.parse(url), body: {'id_acc': '5'}).then(
+      final userInfo =
+          Provider.of<InfoCompteController>(context, listen: false).InfoGlobal;
+      await http
+          .post(Uri.parse(url), body: {'id_acc': userInfo['id_acc']}).then(
         (value) async {
+          print("Value Xav>>>> >>>>> ${value.body} ");
           if (value.body.toString() != '"aucune annonce"') {
             Provider.of<MyAdsProvider>(context, listen: false)
                 .changeResponse(value);
@@ -32,8 +37,12 @@ class _MyAdsState extends State<MyAds> {
               .changeIsLoadingOnline(false);
         },
       );
-    } catch (e) {
-      print('info user = ${UserInfos.info}');
+    } catch (e, trace) {
+      if (kDebugMode) {
+        print(e);
+        print(trace);
+        print('info user = ${UserInfos.info}');
+      }
       Provider.of<MyAdsProvider>(context, listen: false)
           .changeIsLoadingOnline(false);
     }

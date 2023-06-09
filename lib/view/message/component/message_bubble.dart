@@ -1,71 +1,60 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:trocbuy/model/message_model.dart';
+import 'package:trocbuy/view/account/account_home.dart';
+import '../../../global_functions/init_data.dart';
 import '../../../res/styles.dart';
 
 class MessageBubble extends StatelessWidget {
-  const MessageBubble({
-    this.email,
-    this.emailto,
-    this.text,
-    this.isMe,
-    this.time,
-    this.name,
-  });
+  const MessageBubble({super.key, required this.message});
 
-  final String? email;
-  final String? emailto;
-  final String? text;
-  final Timestamp? time;
-  final bool? isMe;
-  final String? name;
+  final MessageModel message;
 
   @override
   Widget build(BuildContext context) {
-    String timeFormatted = '';
-    if (time != null) {
-      final dateTime = time?.toDate();
-      timeFormatted = dateTime!.format(DateTimeFormats.europeanAbbr).toString();
-    }
+    final timeFormatted = DateFormat.yMMMMEEEEd('fr_FR').format(message.date) +
+        ', ' +
+        DateFormat.Hm().format(message.date);
+    bool isMe = InitData.prefs.getString("email") == message.senderEmail;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
       child: Column(
-        crossAxisAlignment:
-            isMe! ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(
-            name ?? '',
+          /*  !isMe? Text(
+            message.author??'--',
             style:
                 const TextStyle(fontSize: 16.0, color: Styles.principalColor),
-          ),
+          ):const SizedBox.shrink(),*/
           Container(
             width: MediaQuery.of(context).size.width * 65 / 100,
             decoration: BoxDecoration(
-                border: Border.all(
-                    color: isMe! ? Colors.green : Colors.black54, width: 1.5)),
-            child: text != null
+              border: Border.all(
+                color: isMe ? Theme.of(context).primaryColor : Colors.green,
+                width: 2,
+              ),
+            ),
+            child: message.message != null
                 ? Column(
                     children: [
-                      time != null
-                          ? Align(
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                timeFormatted,
-                                style: const TextStyle(
-                                    fontSize: 15.0, color: Colors.black),
-                              ),
-                            )
-                          : const Text(''),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          timeFormatted,
+                          style: const TextStyle(fontSize: 15.0, color: Colors.black),
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, top: 8.0, bottom: 8.0, right: 8.0),
+                          padding:
+                              const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0, right: 8.0),
                           child: Text(
-                            '$text',
-                            style: const TextStyle(
-                                fontSize: 18.0, color: Colors.black),
+                            message.message ?? '',
+                            style: const TextStyle(fontSize: 18.0, color: Colors.black),
                           ),
                         ),
                       ),

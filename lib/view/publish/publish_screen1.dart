@@ -54,7 +54,8 @@ class _PublishScreen1State extends State<PublishScreen1> {
               children: [
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(224, 255, 255, 1),
+                      backgroundColor:Theme.of(context).colorScheme.primary,
+
                     ),
                     child: const Text("Ajoutez des photos",
                         style: TextStyle(fontSize: 16)),
@@ -72,7 +73,7 @@ class _PublishScreen1State extends State<PublishScreen1> {
                 // ignore: deprecated_member_use
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(0, 206, 209, 1),
+                    backgroundColor:Theme.of(context).colorScheme.primary,
                   ),
                   child: const Text(
                     "Continuer sans photos",
@@ -362,7 +363,7 @@ class _PublishScreen1State extends State<PublishScreen1> {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Text(
                   "Vos photos :",
                 ),
@@ -386,7 +387,7 @@ class _PublishScreen1State extends State<PublishScreen1> {
                     return Stack(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           width: 150.0,
                           height: 250.0,
                           child: Provider.of<PublishProvider>(context)

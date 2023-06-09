@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+
 import '../../res/strings.dart';
 import '../../res/styles.dart';
 import '../components/ad_sort_button.dart';
-import '../components/app_bar/default_app_bar.dart';
-
 import '../components/ads_top_buttons.dart';
-import '../components/search_bar.dart';
+import '../components/app_bar/default_app_bar.dart';
+import '../components/search_bar.dart' as my_search_bar;
 import 'component/filter_result_content.dart';
 
 class FilterResult extends StatelessWidget {
@@ -53,7 +53,7 @@ class FilterResult extends StatelessWidget {
                     ],
                   ),
                 ),
-                SearchBar(
+                my_search_bar.SearchBar(
                   hintText: Strings.kWhatDoYouFind,
                 ),
               ],

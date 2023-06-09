@@ -2,34 +2,35 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../../../model/is_login.dart';
 
-class InfoCompteController with ChangeNotifier {
+class InfoCompteController with ChangeNotifier, DiagnosticableTreeMixin {
   // int id_compte = 0;
   // ignore: non_constant_identifier_names
   Map<dynamic, dynamic> InfoGlobal = {
-    'number': '0'
-    // "id_acc": "",
-    // "name": "",
-    // "first_name": "",
-    // "pseudo": "",
-    // "about_me": "",
-    // "email": "",
-    // "phone": "",
-    // "address": "",
-    // "postcode": "",
-    // "civility": "",
-    // "type": "",
-    // "city": "",
-    // "state": "",
-    // "credit": "",
-    // "ip": "",
-    // "comp_name": "",
-    // "comp_num": ""
+    'number': '0',
+     "id_acc": "",
+     "name": "",
+     "first_name": "",
+     "pseudo": "",
+     "about_me": "",
+     "email": "",
+     "phone": "",
+     "address": "",
+     "postcode": "",
+     "civility": "",
+     "type": "",
+     "city": "",
+     "state": "",
+     "credit": "",
+     "ip": "",
+     "comp_name": "",
+     "comp_num": ""
   };
 
   void insertToInfoGlobal(String key, dynamic val) {
@@ -39,16 +40,16 @@ class InfoCompteController with ChangeNotifier {
   }
 
   void adsNumber(String id, BuildContext context) async {
-    print('id : $id');
+
     String url = 'https://api.trocbuy.fr/flutter/duo_ads_number_compte.php';
     http.Response resp = await http.post(Uri.parse(url), body: {'id_acc': id});
     try {
       if (jsonDecode(resp.body)['number'] != null) {
         InfoGlobal['number'] = jsonDecode(resp.body)['number'];
       }
-      print('ads : ${jsonDecode(resp.body)['number']}');
+
     } catch (e) {
-      print('$e \n ${InfoGlobal['number']}');
+
     }
 
     notifyListeners();
@@ -58,6 +59,11 @@ class InfoCompteController with ChangeNotifier {
     if (jsonDecode(response.body)['name'] != null) {
       Provider.of<InfoCompteController>(context, listen: false)
           .InfoGlobal['name'] = jsonDecode(response.body)['name'];
+    }
+
+    if (jsonDecode(response.body)['id_acc'] != null) {
+      Provider.of<InfoCompteController>(context, listen: false)
+          .InfoGlobal['id_acc'] = jsonDecode(response.body)['id_acc'];
     }
 
     if (jsonDecode(response.body)['pseudo'] != null) {

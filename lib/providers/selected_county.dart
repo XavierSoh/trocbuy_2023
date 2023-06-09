@@ -8,19 +8,17 @@ import 'selected_region.dart';
 class SelectedCounty with ChangeNotifier, DiagnosticableTreeMixin {
   County county = County(nameCountyLang: 'Choisissez le département');
 
-  List<County> departement = [];
+  List<County> department = [];
 
-  void getDepartement(BuildContext context) {
-    departement = County.counties
+  void getDepartment(BuildContext context) {
+    department = County.counties
         .where((element) =>
-            element.parReg == Provider.of<SelectedRegion>(context).region.idReg)
+            element.parReg == Provider.of<SelectedRegion>(context, listen: false).region.idReg)
         .toList();
-    departement = [
+    department = [
       ...[County(nameCountyLang: 'Choisissez le département')],
-      ...departement
+      ...department
     ];
-
-    // county = departement[0];
     notifyListeners();
   }
 

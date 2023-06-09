@@ -24,7 +24,7 @@ class MapScreen extends StatelessWidget {
               children: [
                 LocationSearchBar(hintText: Strings.kWhereDoYouFind),
                 //const RegionArea(),
-                // const SizedBox(height: 55),
+
                 const AllFranceAndAroundMe(),
                 const RegionsMap()
               ],

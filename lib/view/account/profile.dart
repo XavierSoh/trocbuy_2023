@@ -713,8 +713,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 minWidth: 150,
                 onPressed: () async {
-                  /* await EasyLoading.show(
-                      status: 'Mise à jour des informations');*/
+                   await EasyLoading.show(
+                      status: 'Mise à jour des informations');
                   setState(() {
                     UserInfos.info['name'] = name;
                     UserInfos.info['first_name'] = firstName;

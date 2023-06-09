@@ -18,16 +18,12 @@ class AdPriceComponent extends StatelessWidget {
             ? Center(
                 child: AutoSizeText(
                   price.toString() + Utils.getCurrency(),
-                  style: Styles.googleStyle.copyWith(
-                    color: Styles.orangeColor,
-                  ),
+                  style: const TextStyle(color: Styles.orangeColor),
                 ),
               )
             : AutoSizeText(
                 price.toString() + Utils.getCurrency(),
-                style: Styles.googleStyle.copyWith(
-                  color: Styles.orangeColor,
-                ),
+                style: const TextStyle(color: Styles.orangeColor),
               );
   }
 }

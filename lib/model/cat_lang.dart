@@ -75,4 +75,16 @@ class CatLang {
       if (kDebugMode) {}
     }
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CatLang &&
+
+          nameCatLang == other.nameCatLang;
+
+  @override
+  int get hashCode =>
+
+      nameCatLang.hashCode;
 }

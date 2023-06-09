@@ -1,13 +1,11 @@
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Styles {
   static const Color principalColor = Color(0xff2c3348);
   static const Color orangeColor = Colors.deepOrange;
   static const greyColor = Color(0xffaeaeae);
   static const greyColor2 = Color(0xffE8E8E8);
-  static TextStyle googleStyle = GoogleFonts.roboto();
 
   ///
 
@@ -23,16 +21,16 @@ class Styles {
 
   static const rowDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 1, mainAxisSpacing: 1.0, mainAxisExtent: 100);
-  static CarouselOptions buildCarouselOptions(double height) {
+  static CarouselOptions buildCarouselOptions(double height,
+      {bool autoplay = true}) {
     return CarouselOptions(
         initialPage: 0,
-        autoPlay: true,
-
+        autoPlay: autoplay,
         aspectRatio: 16 / 9,
         viewportFraction: 1,
         enlargeCenterPage: false,
         height: height * 48 / 100,
-        enableInfiniteScroll: false,
+        enableInfiniteScroll: true,
         autoPlayInterval: const Duration(seconds: 10),
         enlargeStrategy: CenterPageEnlargeStrategy.height);
   }

@@ -1,12 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
-import '../../../providers/myads_provider.dart';
 
 import '../../../model/ad.dart';
+import '../../../providers/myads_provider.dart';
 import '../component/my_ads_card.dart';
 import 'no_ads.dart';
 
@@ -19,7 +20,7 @@ class GetAdsOnline extends StatefulWidget {
 
 class _GetAdsOnlineState extends State<GetAdsOnline> {
   List<Ad> premiumDetails = [];
-  var date;
+
   Future<List<Ad>> _premiumDetails(Response response) async {
     premiumDetails.clear();
     var jsonData = jsonDecode(response.body);
@@ -35,18 +36,21 @@ class _GetAdsOnlineState extends State<GetAdsOnline> {
           title: premiumVal['title'],
           city: premiumVal['city'],
           text: premiumVal['text'],
-          price: double.parse(premiumVal['price']),
+          price: double.tryParse(premiumVal['price'].toString()),
           calendarDate: premiumVal['date'],
           hour: premiumVal['heure'],
-          idAd: int.parse(premiumVal['id_ad']),
-          urgent: int.parse(premiumVal['urgent']),
-          pictureNum: int.tryParse(premiumVal['pictures_num']),
-          visitNum: int.parse(premiumVal['visit_num']),
-          state: int.parse(premiumVal['state']),
+          idAd: int.tryParse(premiumVal['id_ad'].toString()),
+          urgent: int.tryParse(premiumVal['urgent'].toString()),
+          pictureNum: int.tryParse(premiumVal['pictures_num'].toString()),
+          visitNum: int.tryParse(premiumVal['visit_num'].toString()),
+          state: int.tryParse(premiumVal['state'].toString()),
         );
         premiumDetails.add(premiums);
-      } catch (e) {
-        print(e);
+      } catch (e, trace) {
+        if (kDebugMode) {
+          print(trace);
+          print(e);
+        }
       }
     }
     print('leght : ${premiumDetails.length}');
@@ -73,10 +77,9 @@ class _GetAdsOnlineState extends State<GetAdsOnline> {
           if (snapshot.hasData) {
             return ListView.separated(
               itemBuilder: (context, index) {
-                print(snapshot.data[index].pictureName);
                 return MyAdsCard(
-                  imagePath: snapshot.data[index].pictureName,
-                  titreAnnonce: snapshot.data[index].title,
+                  imagePath: snapshot.data[index]!.pictureName ?? "",
+                  titreAnnonce: snapshot.data[index]!.title ?? "--",
                   prixAnnonce: snapshot.data[index].price.toString(),
                   nomberVues: snapshot.data[index].visitNum.toString(),
                   // adsInfo: snapshot.data[index],

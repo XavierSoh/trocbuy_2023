@@ -1,18 +1,17 @@
-import 'package:flutter/foundation.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:trocbuy/services/admob_services.dart';
+
 import '../../res/styles.dart';
+import 'components/ad_images.dart';
 import 'components/author_and_location.dart';
+import 'components/bottom_navigation_content.dart';
 import 'components/cross_back_button.dart';
 import 'components/features.dart';
 import 'components/general_informations.dart';
 import 'components/others_details.dart';
 import 'components/share_copy_report.dart';
 import 'components/title_and_date.dart';
-import 'components/ad_images.dart';
-import 'components/bottom_navigation_content.dart';
-//import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 
 class AdDetail extends StatefulWidget {
   static const id = "ad_details_id";
@@ -29,7 +28,6 @@ class _AdDetailState extends State<AdDetail> {
     super.initState();
     bannerSize = AdmobBannerSize.BANNER;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +46,7 @@ class _AdDetailState extends State<AdDetail> {
                   const TitleAndDate(),
                   AdmobBanner(
                       adUnitId: AdmobService.bannerAdUnitId,
-                      adSize: bannerSize!
-                  ),
-
+                      adSize: bannerSize!),
                   const SizedBox(height: 10),
                   const GeneralInformations(),
                   const OtherDetails(),

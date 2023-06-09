@@ -6,14 +6,14 @@ import '../../providers/selected_cat_lang.dart';
 
 import '../../view/components/custom_cupertino_picker.dart';
 
-class SwitchCat extends StatefulWidget {
-  const SwitchCat({Key? key}) : super(key: key);
+class SwitchSubCat extends StatefulWidget {
+  const SwitchSubCat({Key? key}) : super(key: key);
 
   @override
-  _SwitchCatState createState() => _SwitchCatState();
+  _SwitchSubCatState createState() => _SwitchSubCatState();
 }
 
-class _SwitchCatState extends State<SwitchCat> {
+class _SwitchSubCatState extends State<SwitchSubCat> {
   void onItemSelect() {
     Provider.of<PublishProvider>(context, listen: false).changeSubCatsOptions(
         Provider.of<PublishProvider>(context, listen: false)
@@ -24,7 +24,7 @@ class _SwitchCatState extends State<SwitchCat> {
   @override
   Widget build(BuildContext context) {
     List<CatLang> subCAteg = CatLang.Subcats.where((element) =>
-        element.parCat ==
+    element.parCat ==
         Provider.of<SelectedCatLang>(context).catLang.idCat).toList();
 
     subCAteg = [
@@ -32,9 +32,43 @@ class _SwitchCatState extends State<SwitchCat> {
       ...subCAteg
     ];
     if (subCAteg.isNotEmpty) {
+     return  ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              /*side: BorderSide(color: kPrincipal_colour)*/
+            ),
+            elevation: 8),
+        onPressed: null,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: DropdownButton<CatLang>(
+            dropdownColor: Colors.white,
+            focusColor: Colors.white,
+            underline: const SizedBox.shrink(),
+            value: Provider.of<SelectedCatLang>(context).subCatLang,
+            items: subCAteg
+                .map(
+                  (e) => DropdownMenuItem<CatLang>(value: e, child: Text(e.nameCatLang??'--')),
+            )
+                .toList(),
+            onChanged: (value) {
+
+              Provider.of<SelectedCatLang>(context, listen: false)
+                  .changeSubCatLang(value!);
+
+              Provider.of<PublishProvider>(context, listen: false).changeSubCatsOptions(
+                  Provider.of<PublishProvider>(context, listen: false)
+                      .subCatsOptionsSelect);
+            },
+          ),
+        ),
+      );
       return CustomCupertinoPicker(
           ruleFilterName:
-              Provider.of<SelectedCatLang>(context).subCatLang.nameCatLang,
+          Provider.of<SelectedCatLang>(context).subCatLang.nameCatLang,
           onItemChanged: (index) {
             Provider.of<SelectedCatLang>(context, listen: false)
                 .changeSubCatLang(subCAteg[index]);

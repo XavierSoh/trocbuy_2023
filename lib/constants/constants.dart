@@ -551,7 +551,8 @@ Future<Ad?> futureAdsCategories(
 
   var response = await http
       .post(
-          Uri.parse('https://api.trocbuy.fr/flutter/duo_selection_categories.php'),
+          Uri.parse(
+              'https://api.trocbuy.fr/flutter/duo_selection_categories.php'),
           body: jsonEncode(body))
       .then(
     (value) {
@@ -569,7 +570,6 @@ Future<Ad?> futureAdsCategories(
           jsonData[index]['id_ad'],
           jsonData[index]['nbre'],
         );*/
-
       }
     },
   ).timeout(Duration(seconds: 100), onTimeout: () async {});
@@ -596,10 +596,6 @@ Future<Ad> kFutureAds(int index, int urlNumber, List<String> urls,
       nomCategorie*/
       );
   return premiums;
-}
-
-class IsLogin {
-  static bool state = false;
 }
 
 class CompteInformation {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
+import 'package:trocbuy/model/search_model.dart';
+import 'package:trocbuy/providers/search_model_prov.dart';
 import '../../model/cat_lang.dart';
 import '../../providers/search_icon_provider.dart';
 import '../../res/strings.dart';
@@ -53,9 +55,10 @@ class _SearchBarState extends State<SearchBar> {
                       hintText: widget.hintText ?? "")),
               suggestionsCallback: (typedText) async {
                 if (Keywords.keyWordsList.isEmpty) {
+                  await Keywords.setKeyWordList();
                   setState(
-                    () async {
-                      await Keywords.setKeyWordList();
+                    () {
+
                     },
                   );
                 }
@@ -70,74 +73,25 @@ class _SearchBarState extends State<SearchBar> {
                     .toSet()
                     .toList();
               },
-              hideOnError: true,
+              hideOnError: false,
               hideOnEmpty: false,
               hideOnLoading: false,
               minCharsForSuggestions: 1,
               itemBuilder: (context, String suggestion) {
-                CatLang catLang = CatLang();
-                String searchText = suggestion;
-                String text2 = "";
-                if (suggestion.isNotEmpty) {
-                  if (suggestion.contains('dans')) {
-                    String text = suggestion.split('dans').last;
-                    catLang.nameCatLang = text;
-                  }
-                }
-                return catLang.nameCatLang != null
-                    ? Item1(
+
+
+                return  Item1(
                         controller: controller,
-                        searchText: searchText,
-                        catLang: catLang,
-                        suggestion: suggestion,
+                  suggestion: suggestion,
                       )
-                    : ListTile(
-                        onTap: () {
-                          print(searchText);
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            CatSearchResult.id,
-                            (route) => route.isFirst,
-                            arguments: searchText,
-                          );
-                          controller.clear();
-                        },
-                        title: Row(
-                          children: [
-                            Flexible(
-                              child: RichText(
-                                maxLines: 2,
-                                overflow: TextOverflow.fade,
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    fontSize: 18.0,
-                                    color: Colors.black,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: text2,
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                    ),
-                                    TextSpan(
-                                      text: suggestion,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: Styles.principalColor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                    ;
               },
               onSuggestionSelected: (string) {
                 controller.clear();
               },
               noItemsFoundBuilder: (BuildContext context) {
+                SearchModel search = SearchModel();
+
                 return GestureDetector(
                   child: Card(
                     color: Colors.grey,
@@ -154,13 +108,16 @@ class _SearchBarState extends State<SearchBar> {
                     ),
                   ),
                   onTap: () {
+                    search.searchText=controller.text;
+                    context.read<SearchModelProv>().change(search);
+
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       CatSearchResult.id,
                       (route) => route.isFirst,
-                      arguments: controller.text,
+
                     );
-                    controller.clear();
+
                   },
                 );
               },
@@ -174,49 +131,63 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 class Item1 extends StatelessWidget {
-  const Item1(
+   Item1(
       {Key? key,
       required this.controller,
-      required this.searchText,
-      required this.catLang,
-      required this.suggestion})
+     required this.suggestion
+      })
       : super(key: key);
 
   final TextEditingController controller;
-  final String searchText;
-  final CatLang catLang;
-  final String suggestion;
-
+final String suggestion;
+   SearchModel search = SearchModel();
   @override
   build(BuildContext context) {
+
+
+    search.suggestion=suggestion;
+    search.searchText=controller.text;
+    if (suggestion.isNotEmpty) {
+      if (suggestion.contains('dans')) {
+        String text = suggestion.split('dans').last;
+        search.catLang=text;
+        search = SearchModel(catLang: text, searchText: controller.text.trim(), suggestion: suggestion);
+      }else {
+        search = SearchModel( searchText: controller.text.trim());
+
+      }
+    }
     return ListTile(
       onTap: () {
-        context.read<SelectedCatLang>().changeCatLang(catLang);
+
+        context.read<SearchModelProv>().change(search);
         Navigator.pushNamedAndRemoveUntil(
           context,
           CatSearchResult.id,
-          (route) => route.isFirst,
-          arguments: searchText,
+            (route)=>route.isFirst
+
         );
         controller.clear();
       },
       title: Row(
         children: [
-          RichText(
-            text: TextSpan(
-              style: const TextStyle(
-                fontSize: 18.0,
-                color: Colors.black,
-              ),
-              children: <TextSpan>[
-                TextSpan(text: '${controller.text} dans'),
-                TextSpan(
-                  text: catLang.nameCatLang,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Styles.principalColor),
+          Flexible(
+            child: RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.black,
                 ),
-              ],
+                children: <TextSpan>[
+                  TextSpan(text: '${controller.text} dans '),
+                  TextSpan(
+                    text: search.catLang??search.suggestion,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Styles.principalColor),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -228,8 +199,7 @@ class Item1 extends StatelessWidget {
 InputDecoration buildInputDecoration(
     BuildContext context, TextEditingController controller,
     {String? hintText}) {
-  final read = context.read<SearchIconProvider>();
-  final watch = context.watch<SearchIconProvider>();
+
 
   return InputDecoration(
     enabled: true,
@@ -238,31 +208,7 @@ InputDecoration buildInputDecoration(
     fillColor: Colors.white,
     hintText: hintText ?? Strings.kWhatDoYouFind,
     hintStyle: const TextStyle(fontWeight: FontWeight.w600),
-    suffixIcon: const Icon(Icons.search) /*watch.show
-        ?*/
-    /*  IconButton(
-      color: Styles.principalColor,
-      icon: const Icon(Icons.search),
-      onPressed: () {
-        //read.changeState(false);
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          CatSearchResult.id,
-          (route) => route.isFirst,
-          arguments: controller.text,
-        );
-        controller.clear();
-      },
-    )*/
-    /* : IconButton(
-            color: Styles.principalColor,
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              //read.changeState(true);
-
-              controller.clear();
-            },
-          )*/
+    suffixIcon: const Icon(Icons.search)
     ,
     focusedBorder: const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -276,51 +222,4 @@ InputDecoration buildInputDecoration(
   );
 }
 
-// class WhenEmptyBuilder extends StatelessWidget {
-//   const WhenEmptyBuilder({
-//     Key? key,
-//   }) : super(key: key);
 
-//   @override
-//   build(BuildContext context) {
-//     return Container(
-//       width: MediaQuery.of(context).size.width,
-//       decoration: BoxDecoration(
-//           color: Colors.white, borderRadius: BorderRadius.circular(10)),
-//       child: SingleChildScrollView(
-//         child: Column(
-//           children: CatLang.catsLang
-//               .map(
-//                 (e) => Container(
-//                   padding: const EdgeInsets.symmetric(vertical: 5),
-//                   child: InkWell(
-//                     borderRadius: BorderRadius.circular(10),
-//                     child: Text(
-//                       e.nameCatLang!,
-//                       style:
-//                           const TextStyle(fontSize: 16.0, color: Colors.black),
-//                     ),
-//                     onTap: () {
-//                       Navigator.push(
-//                         context,
-//                         MaterialPageRoute(
-//                           builder: (context) {
-//                             return const Text(
-//                                 ''); /*AdsSingleCat(
-//                               categorie: Category2(name_cat_lang: e),
-//                               searchText: e,
-//                             )*/
-//                           },
-//                         ),
-//                       );
-//                       // MaterialPageRoute(builder: (context) => AdsList()));
-//                     },
-//                   ),
-//                 ),
-//               )
-//               .toList(),
-//         ),
-//       ),
-//     );
-//   }
-// }

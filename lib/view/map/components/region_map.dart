@@ -1,8 +1,10 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trocbuy/model/region.dart';
 import 'package:trocbuy/providers/selected_region.dart';
 import 'package:trocbuy/res/strings.dart';
+import 'package:trocbuy/services/admob_services.dart';
 import 'package:trocbuy/view/components/ad_sort_button.dart';
 import 'package:trocbuy/view/region_ads/open_region.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -18,27 +20,33 @@ class RegionsMap extends StatefulWidget {
 
 class _RegionsMapState extends State<RegionsMap> {
   bool isLoading = true;
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 80 / 100,
+      height: MediaQuery.of(context).size.height * 90 / 100,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Spacer(),
           Text(
             Strings.kFindOnCard,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
+          const SizedBox(height: 8),
           Stack(
             children: [
               Center(
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 60 / 100,
-                  width: MediaQuery.of(context).size.width * 90 / 100,
+                  height: MediaQuery.of(context).size.height * 50 / 100,
+                  width: MediaQuery.of(context).size.width * 100 / 100,
                   child: WebView(
                       initialUrl: 'https://api.trocbuy.fr/flutter/maps/map.php',
                       javascriptMode: JavascriptMode.unrestricted,
@@ -51,7 +59,8 @@ class _RegionsMapState extends State<RegionsMap> {
                         String areaClicked = MapFunctions.getRegions(action);
 
                         Region region = Region.regions.firstWhere(
-                          (element) => element.nameRegLang.contains(areaClicked),
+                          (element) =>
+                              element.nameRegLang.contains(areaClicked),
                         );
                         Future.delayed(
                           const Duration(milliseconds: 1),
@@ -83,6 +92,14 @@ class _RegionsMapState extends State<RegionsMap> {
                         )
                       : const SizedBox.shrink())
             ],
+          ),
+          const SizedBox(height: 32.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: AdmobBanner(
+              adUnitId: AdmobService.bannerAdUnitId,
+              adSize: AdmobBannerSize.LARGE_BANNER,
+            ),
           ),
           const Spacer(),
         ],

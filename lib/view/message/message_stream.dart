@@ -1,19 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trocbuy/global_functions/init_data.dart';
+import 'package:trocbuy/model/message_model.dart';
+import 'package:trocbuy/model/user_infos.dart';
+import 'package:trocbuy/providers/message_model_prov.dart';
+import 'package:trocbuy/utils/utils.dart';
 
 import 'component/message_bubble.dart';
+import 'component/warning.dart';
+
+final firebaseFirestore = FirebaseFirestore.instance;
 
 class MessageStream extends StatefulWidget {
-  final String? email, name, receiverName, autorMail, id;
-  final FirebaseFirestore? firebaseFirestore;
-
-  MessageStream(
-      {this.email,
-      this.name,
-      this.autorMail,
-      this.receiverName,
-      this.id,
-      this.firebaseFirestore});
+  const MessageStream({super.key});
 
   @override
   _MessageStreamState createState() => _MessageStreamState();
@@ -22,57 +23,52 @@ class MessageStream extends StatefulWidget {
 class _MessageStreamState extends State<MessageStream> {
   bool isMe = false;
 
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: widget.firebaseFirestore!
-          .collection('ads')
-          .orderBy('time', descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        List<MessageBubble> messageBubbles = [];
-        if (!snapshot.hasData) {}
-        if (snapshot.hasData) {
-          final messages = snapshot.data!.docs;
-          for (var message in messages) {
-            final messageText = message['text'];
-            final senderMail = message['email'];
-            final mailTo = message['emailto'] ?? widget.autorMail;
-            final name = message['name'];
-            final time = message['time'];
-            //final currentUser = loggedInUser.email;
-            if (widget.id == message['idAd']) {
-              if (widget.email == senderMail) {
-                MessageBubble messageBubble = MessageBubble(
-                  email: senderMail ?? ' ',
-                  emailto: widget.autorMail,
-                  text: messageText ?? ' ',
-                  name: name ?? ' ',
-                  isMe: true,
-                  time: time,
-                );
-                messageBubbles.add(messageBubble);
-              } else if (widget.autorMail == mailTo) {
-                MessageBubble messageBubble = MessageBubble(
-                  email: senderMail ?? ' ',
-                  emailto: widget.autorMail,
-                  text: messageText ?? ' ',
-                  name: name ?? ' ',
-                  isMe: false,
-                  time: time,
-                );
-                messageBubbles.add(messageBubble);
-              }
-            }
-          }
+    final stream = firebaseFirestore
+        .collection(Utils.messagesCollectionName)
+        .where(Utils.conversationDoc, isEqualTo: Utils.buildConversationCollection(context))
+        .withConverter<MessageModel>(
+      fromFirestore: (value, _) {
+        final MessageModel message = MessageModel.fromJson(value.data()!);
+        message.reference = value.id;
+        return message;
+      },
+      toFirestore: (message, _) => message.toJson(),
+    ).orderBy('date', descending: true)
+        .snapshots();
+    final messageModel = context.watch<MessageModelProv>().messageModel;
+    messageModel.conversation = Utils.buildConversationCollection(context);
+    return StreamBuilder<QuerySnapshot<MessageModel>>(
+      stream: stream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<MessageModel>> snapshot) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('Something went wrong'),
+          );
         }
 
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.65,
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CupertinoActivityIndicator(radius: 40.0,),
+          );
+        }
+
+        return SizedBox(
+         height: MediaQuery.of(context).size.height*
+          68/100,
           child: ListView(
-            //reverse: true,
-            padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
-            children: messageBubbles.toList(),
+            reverse: true,
+shrinkWrap: true,
+            children: [
+
+              ...snapshot.data!.docs.map((DocumentSnapshot<MessageModel> document) {
+       var  messageModel = document.data()!;
+              return MessageBubble(message: messageModel);
+            }).toList(),
+              const Warning(),
+            ]
           ),
         );
       },

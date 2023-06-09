@@ -13,10 +13,10 @@ import '../../../utils/utils.dart';
 
 class AdDetailsFunctions {
   static callNumber(String num) async {
-    String uri = 'tel:$num';
+    Uri  uri = Uri.parse('tel:+33'+ num.replaceAll('+33', ''));
 
-    if (await canLaunch(uri)) {
-      await launch(uri);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
       throw 'Could not launch ...$uri';
     }
@@ -24,14 +24,14 @@ class AdDetailsFunctions {
 
   static textAdvertiser(String phone) async {
     // Android
-    String uri = 'sms:+33$phone ?body=${Strings.kTextMessage}';
-    if (await canLaunch(uri)) {
-      await launch(uri);
+    Uri  uri = Uri.parse('sms:+33${phone.replaceAll('+33', '')} ?body=${Strings.kTextMessage}');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
       // iOS
-      String uri = 'sms:+33+$phone} ';
-      if (await canLaunch(uri)) {
-        await launch(uri);
+      Uri uri = Uri.parse('sms:+33+$phone}');
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
       } else {
         throw 'Impossible de lancer $uri';
       }
@@ -40,14 +40,14 @@ class AdDetailsFunctions {
 
   static emailAdvertiser(String email, String title) async {
     // Android
-    String uri = 'mailto:' + email + '?subject=${Strings.kAd}: ' + title;
-    if (await canLaunch(uri)) {
-      await launch(uri);
+    Uri uri = Uri.parse('mailto:' + email + '?subject=${Strings.kAd}: ' + title);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
       // iOS
-      String uri = 'mailto:sohfranc@gmail.com';
-      if (await canLaunch(uri)) {
-        await launch(uri);
+      Uri uri = Uri.parse('mailto:'+email);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
       } else {
         throw 'D envoyer l annonce $uri';
       }

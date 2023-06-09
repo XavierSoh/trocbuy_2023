@@ -6,14 +6,12 @@ import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../favorite/provider/provider_favorite.dart';
-import '../../home/home.dart';
-import '../provider/info_compte.dart';
-
 import '../../../res/strings.dart';
 import '../../../res/styles.dart';
 import '../../../services/helper_functions.dart';
 import '../../../services/share_preference.dart';
+import '../../home/home.dart';
+import '../provider/info_compte.dart';
 import 'email_validator.dart';
 
 class LoginFunction {
@@ -75,14 +73,14 @@ class LoginFunction {
 
       await HelperFunctions.saveUserLoggedInSharedPreference(true);
       await setUserInfo(response);
-      // await getUserInfo(context: context);
+
       Provider.of<InfoCompteController>(context, listen: false)
           .getInfoCompte(context, response);
       Provider.of<InfoCompteController>(context, listen: false).adsNumber(
           Provider.of<InfoCompteController>(context, listen: false)
               .InfoGlobal['id_acc'],
           context);
-      Provider.of<FavoriteFunctions>(context, listen: false).getListFavorite;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

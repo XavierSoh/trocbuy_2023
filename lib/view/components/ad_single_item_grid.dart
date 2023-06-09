@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import '../../res/styles.dart';
-import 'ad_city_component.dart';
-import 'ad_favorite_icons_component.dart';
-import 'ad_image_component.dart';
-import 'ad_time_component.dart';
-import 'ad_title_component.dart';
 
 import '../../model/ad.dart';
 import '../../model/date_helper.dart';
 import '../../providers/selected_ad.dart';
 import '../../res/strings.dart';
+import '../../res/styles.dart';
 import '../ad_details/ad_details.dart';
+import 'ad_city_component.dart';
+import 'ad_favorite_icons_component.dart';
+import 'ad_image_component.dart';
 import 'ad_picture_num_component.dart';
 import 'ad_price_component.dart';
+import 'ad_time_component.dart';
+import 'ad_title_component.dart';
 
 class AdSingleItemGrid extends StatelessWidget {
   const AdSingleItemGrid({Key? key, required this.ad}) : super(key: key);
@@ -31,9 +31,7 @@ class AdSingleItemGrid extends StatelessWidget {
               children: <Widget>[
                 AdImageComponent(ad: ad),
                 AdPictureNumComponent(ad: ad),
-                AdFavoriteIconsComponent(
-                  idAd: ad.idAd.toString(),
-                )
+                AdFavoriteIconsComponent(ad: ad)
               ],
             ),
             AdTitleComponent(

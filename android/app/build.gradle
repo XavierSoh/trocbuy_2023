@@ -52,7 +52,7 @@ android {
         applicationId "fr.trocbuy2"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 28
+        versionCode 37
         versionName flutterVersionName
         multiDexEnabled true
     }

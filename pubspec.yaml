@@ -2,7 +2,7 @@ name: trocbuy
 description: Application de petites annonces.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.7+28
+version: 1.0.8+37
 
 environment:
   sdk: ">=2.19.6 <3.0.0"
@@ -29,7 +29,6 @@ dependencies:
   flutter_email_sender: ^5.1.0
   flutter_typeahead: ^4.3.1
   fluttertoast: ^8.0.9
-  google_fonts: ^3.0.1
   google_maps_flutter: ^2.2.3
   google_sign_in: ^5.4.0
   http: ^0.13.5
@@ -51,6 +50,16 @@ dependencies:
   url_launcher: ^6.1.5
   webview_flutter: ^3.0.4
   admob_flutter: ^3.0.0
+  email_validator: ^2.1.17
+  intl_phone_number_input: ^0.7.3+1
+  new_version_plus: ^0.0.9
+  intl: ^0.17.0
+  flutter_local_notifications: ^14.0.0+1
+  audioplayers: ^4.0.1
+  rx_shared_preferences: ^3.0.0
+
+
+
 
 
 dev_dependencies:
@@ -58,7 +67,8 @@ dev_dependencies:
   flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
-  json_serializable: ^6.3.1
+  json_serializable: ^6.7.0
+
 
 flutter:
   uses-material-design: true

@@ -13,15 +13,15 @@
             <data android:scheme="mailto" />
         </intent>
         <!-- If your app makes calls -->
-        <!--<intent>
+        <intent>
             <action android:name="android.intent.action.DIAL" />
             <data android:scheme="tel" />
-        </intent>-->
+        </intent>
         <!-- If your sends SMS messages -->
-        <!-- <intent>
+         <intent>
              <action android:name="android.intent.action.SENDTO" />
              <data android:scheme="smsto" />
-         </intent>-->
+         </intent>
         <!-- If your app sends emails -->
         <!--<intent>
           <action android:name="android.intent.action.SEND" />
@@ -34,7 +34,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name="${applicationName}"
